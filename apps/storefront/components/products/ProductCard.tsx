@@ -35,7 +35,7 @@ export function ProductCard({ product }: ProductCardProps) {
       {product.variants && product.variants.length > 0 && (
         <div key={"product"} className="">
           {product.variants.map((variant) => (
-            <div key={variant.sku}>
+            <div key={variant.id}>
               <span>{variant.title}</span>
               {variant.calculated_price.calculated_amount && (
                 <span>
