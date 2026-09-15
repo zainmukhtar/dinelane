@@ -2,7 +2,7 @@ export interface Product {
   id: string;
   title: string;
   description: string | null;
-  image: string | null;
+  thumbnail: string | null;
   variants: ProuductVariant[];
 }
 
@@ -10,6 +10,7 @@ export interface ProuductVariant {
   id: string;
   sku: string;
   title: string;
+  calculated_price: CalculatedPrice;
 }
 
 export interface ProductOptions {
@@ -21,4 +22,10 @@ export interface ProductOptions {
 export interface ProductOptionValues {
   id: string;
   value: string;
+}
+
+export interface CalculatedPrice {
+  id: string;
+  calculated_amount: number | null;
+  currency_code: string | null;
 }
