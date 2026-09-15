@@ -1,4 +1,6 @@
 import type { Product } from "@repo/types";
+import { apiFetch } from "./client.js";
+import { getRegionId } from "./regions.js";
 
 interface ProductListResponse {
   products: Product[];
@@ -9,20 +11,15 @@ export async function getProducts(
   baseUrl: string,
   publishableApiKey: string,
 ): Promise<Product[]> {
-  console.log("Fetching products from", baseUrl, publishableApiKey);
+  const regionId = await getRegionId(baseUrl, publishableApiKey);
 
-  const res = await fetch(`${baseUrl}/store/products`, {
-    headers: {
-      "x-publishable-api-key": publishableApiKey,
+  const data = await apiFetch<ProductListResponse>(
+    `/store/products?fields=*variants.calculated_price&region_id=${regionId}`,
+    {
+      baseUrl,
+      publishableApiKey,
     },
-  });
+  );
 
-  if (!res.ok) {
-    throw new Error(
-      `Failed to fetch products: ${res.status} ${res.statusText}`,
-    );
-  }
-
-  const data: ProductListResponse = await res.json();
   return data.products;
 }
