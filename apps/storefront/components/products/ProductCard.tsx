@@ -1,11 +1,17 @@
+"use client";
+
 import Image from "next/image";
 import type { Product } from "@repo/types";
+import { getProduct } from "@repo/api-client";
+import { ProductDetailPopup } from "./ProductDetailPopup";
+import { useState } from "react";
 
 interface ProductCardProps {
   product: Product;
 }
 
 export function ProductCard({ product }: ProductCardProps) {
+  const [open, setOpen] = useState(false);
   console.log("Product: ", product);
   // const price = product.variants?.[0]?.calculated_price;
 
@@ -18,8 +24,24 @@ export function ProductCard({ product }: ProductCardProps) {
     ),
   );
 
+  async function handleProductClick() {
+    try {
+      const fullProduct = await getProduct(
+        process.env.NEXT_PUBLIC_API_URL!,
+        process.env.NEXT_PUBLIC_PUBLISHABLE_API_KEY!,
+        product.id,
+      );
+
+      setOpen(true);
+
+      console.log("Full Product: ", fullProduct);
+    } catch (error) {
+      console.error("Failed to fetch product:", error);
+    }
+  }
+
   return (
-    <div className="flex flex-col gap-2">
+    <div className="flex flex-col gap-2" onClick={handleProductClick}>
       <div className="relative aspect-square w-full bg-zinc-100">
         {product.thumbnail && (
           <Image
@@ -54,6 +76,11 @@ export function ProductCard({ product }: ProductCardProps) {
           ))}
         </div>
       )}
+      <ProductDetailPopup
+        open={open}
+        onOpenChange={setOpen}
+        product={product}
+      />
     </div>
   );
 }

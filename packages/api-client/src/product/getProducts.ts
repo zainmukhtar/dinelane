@@ -1,6 +1,6 @@
 import type { Product } from "@repo/types";
-import { apiFetch } from "./client.js";
-import { getRegionId } from "./regions.js";
+import { apiFetch } from "../client.js";
+import { getRegionId } from "../regions.js";
 
 interface ProductListResponse {
   products: Product[];
